@@ -1,6 +1,6 @@
 FROM python:3.9-slim
 
-# Instala Chrome y Chromedriver
+# Instalar Chrome y Chromedriver
 RUN apt-get update && apt-get install -y \
     wget \
     gnupg \
@@ -10,8 +10,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
 
-# Instala Chromedriver
-RUN wget -q https://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip \
+RUN wget -q https://chromedriver.storage.googleapis.com/$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip \
     && unzip chromedriver_linux64.zip \
     && mv chromedriver /usr/bin/chromedriver \
     && chmod +x /usr/bin/chromedriver \
@@ -22,5 +21,7 @@ COPY . .
 RUN pip install -r requirements.txt
 
 ENV PORT=8080
-ENV ENVIRONMENT=production
-CMD ["python", "bot.py"]
+ENV GOOGLE_CHROME_BIN=/usr/bin/google-chrome
+ENV CHROMEDRIVER_PATH=/usr/bin/chromedriver
+
+CMD ["python", "bot.py"]  # Asegúrate de que coincida con tu archivo .py
