@@ -116,3 +116,21 @@ dispatcher = Dispatcher(bot, None, workers=0)
 dispatcher.add_handler(CommandHandler("start", start))
 dispatcher.add_handler(CallbackQueryHandler(elegir_modo))
 dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, manejar_texto))
+from flask import Flask
+import threading
+
+app = Flask(__name__)
+
+# Inicia tu bot en un hilo separado
+def start_bot():
+    import tu_script_bot  # importa y lanza tu bot desde aquí
+
+threading.Thread(target=start_bot).start()
+
+@app.route("/")
+def home():
+    return "Bot activo"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8080)
+
